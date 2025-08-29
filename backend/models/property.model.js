@@ -26,6 +26,18 @@ const propertySchema = new mongoose.Schema({
         country: { type: String, default: "India" }
     },
 
+    location: {
+        type: {
+            type: String,
+            enum: ["Point"],   // GeoJSON type
+            default: "Point"
+        },
+        coordinates: {
+            type: [Number],   // [longitude, latitude]
+            required: true
+        }
+    },
+
     size: {
         type: Number, // in square feet
         required: true
