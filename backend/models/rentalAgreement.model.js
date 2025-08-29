@@ -81,3 +81,5 @@ const rentalAgreementSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const rentalAgreementModel = mongoose.model("Rental-Agreement", rentalAgreementSchema);
+
+export default rentalAgreementModel;
