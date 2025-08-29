@@ -78,7 +78,14 @@ const landlordSchema = new mongoose.Schema({
     isBlocked: {
         type: Boolean,
         default: false
-    }
+    },
+
+    reviews: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Reviews"
+        }
+    ]
 }, { timestamps: true });
 
 landlordSchema.statics.hashPassword = async function(password){
