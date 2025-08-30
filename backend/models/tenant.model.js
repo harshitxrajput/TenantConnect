@@ -30,7 +30,9 @@ const tenantSchema = new mongoose.Schema({
 
     password: {
         type: String,
-        required: true
+        required: true,
+        minLength: 6,
+        select: false
     },
 
     address: {
@@ -87,15 +89,15 @@ const tenantSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 tenantSchema.statics.hashPassword = async function(password){
-    return bcrypt.hash(password, 12);
+    return await bcrypt.hash(password, 12);
 }
 
-tenantSchema.methods.comparePassword = function(enteredPassword){
-    return bcrypt.compare(enteredPassword, this.password)
+tenantSchema.methods.comparePassword = async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword, this.password)
 }
 
-tenantSchema.methods.generateAuthToken = async function(){
-    return jwt.sign({ id: this._id, role: this.role, email: this.email }, process.env.JWT_SECRET_KEY, { expiresIn: "24h" });
+tenantSchema.methods.generateAuthToken = function(){
+    return jwt.sign({ _id: this._id, role: this.role, email: this.email }, process.env.JWT_SECRET_KEY, { expiresIn: "24h" });
 }
 
 const tenantModel = mongoose.model("Tenant", tenantSchema);

@@ -18,9 +18,6 @@ export const registerLandlordController = async (req, res) => {
         });
         
         const token = newLandlord.generateAuthToken();
-        const landlordResponse = newLandlord.toObject();
-        delete landlordResponse.password;
-
         res.cookie("jwt", token, {
             maxAge: 24 * 60 * 60 * 1000,
             httpOnly: true,
@@ -68,7 +65,14 @@ export const loginLandlordController = async (req, res) => {
 
 export const getLandlordProfileController = async (req, res) => {
     try{
+        const userId = req.user?._id;
 
+        const landlordProfile = await landlordModel.findById(userId);
+        if(!landlordProfile){
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        res.status(200).json({ success: true, landlord: landlordProfile });
     }
     catch(err){
         console.log("Erorr in getLandlordProfileController: ", err.message);

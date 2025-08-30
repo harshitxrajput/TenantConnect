@@ -89,7 +89,7 @@ const landlordSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 landlordSchema.statics.hashPassword = async function(password){
-    return bcrypt.hash(password, 12);
+    return await bcrypt.hash(password, 12);
 }
 
 landlordSchema.methods.comparePassword = async function(enteredPassword){
