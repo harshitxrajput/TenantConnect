@@ -35,7 +35,7 @@ const Navbar = () => {
     const [query, setQuery] = useState("");
 
     return (
-        <div className='fixed top-0 w-full'>
+        <div className='fixed top-0 w-full z-100'>
             {/* Header */}
             <header className="flex justify-between items-center px-8 py-4 bg-white shadow-sm">
                 <div onClick={() => navigate('/')} className="flex items-center gap-2 cursor-pointer select-none">

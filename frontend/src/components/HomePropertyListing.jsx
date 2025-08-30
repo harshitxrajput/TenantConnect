@@ -1,8 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const HomePropertyListing = ({property}) => {
+    const navigate = useNavigate();
+
     return (
-        <div className='cursor-pointer'>
+        <div onClick={() => navigate('/property/id')} className='cursor-pointer'>
             <img
                 src={property.image}
                 alt={property.title}

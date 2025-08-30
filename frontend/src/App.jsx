@@ -5,6 +5,7 @@ import SearchPage from "./pages/SearchPage"
 import ProfilePage from "./pages/ProfilePage"
 import useAuthInitializer from "./hooks/useAuthInitializer"
 import useAuthStore from "./store/useAuthStore"
+import PropertyDetailsPage from "./pages/PropertyDetailsPage"
 
 
 const App = () => {
@@ -21,6 +22,8 @@ const App = () => {
                 <Route path="/search" element={<SearchPage />} />
 
                 <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to={"/signup"} />} />
+
+                <Route path="/property/:id" element={<PropertyDetailsPage />} />
             </Routes>
         </div>
   )
