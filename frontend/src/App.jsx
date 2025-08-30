@@ -3,16 +3,18 @@ import LoginSignupPage from "./pages/auth/LoginSignupPage"
 import Homepage from "./pages/Homepage"
 import SearchPage from "./pages/SearchPage"
 import ProfilePage from "./pages/ProfilePage"
+import useAuthInitializer from "./hooks/useAuthInitializer"
 import useAuthStore from "./store/useAuthStore"
 
 
 const App = () => {
-    const { isLoading, authUser } = useAuthStore();
+    useAuthInitializer();
+    const authUser = useAuthStore((state) => state.authUser);
     console.log(authUser);
     return (
         <div>
             <Routes>
-                <Route path="/signup" element={<LoginSignupPage />} />
+                <Route path="/signup" element={!authUser ? <LoginSignupPage /> : <Navigate to={"/"} />} />
 
                 <Route path="/" element={authUser ? <Homepage /> : <Navigate to={"/signup"} />} />
 

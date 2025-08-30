@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import { getAuthUser } from "../lib/Api";
-import useAuthStore from "../store/useAuthStore";
+import { getAuthUser } from "../lib/Api.js";
+import useAuthStore from "../store/useAuthStore.js";
 
 const useAuthUser = () => {
     const authUserFromStore = useAuthStore((state) => state.authUser);

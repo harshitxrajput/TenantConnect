@@ -2,14 +2,17 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 
-import { landlordLogin, landlordSignup, tenantLogin, tenantSignup } from "../../lib/Api";
+import { getAuthUser, landlordLogin, landlordSignup, tenantLogin, tenantSignup } from "../../lib/Api";
 import { toast } from "react-toastify";
 import useAuthUser from "../../hooks/useAuthUser";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/useAuthStore";
 
 const LoginSignupPage = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+
+    const setAuthUser = useAuthStore((state) => state.setAuthUser);
 
     //Landlord Mutations
     const { mutate:landlordSignupMutation, isPending:landlordSignupLoading } = useMutation({
@@ -23,8 +26,9 @@ const LoginSignupPage = () => {
     });
     const { mutate:landlordLoginMutation, isPending:landlordLoginLoading } = useMutation({
         mutationFn: landlordLogin,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["authUser"] })
+        onSuccess: async () => {
+            const profile = await getAuthUser(); // fetch user data
+            setAuthUser(profile);
             toast.success("Logged in Successfully");
             navigate('/');
         },
@@ -71,19 +75,18 @@ const LoginSignupPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(`${mode.toUpperCase()} Data: `, formData);
         
         if(mode === "signup" && role === "Tenant"){
             tenantSignupMutation(formData);
         }
         else if(mode === "login" && role === "Tenant"){
-            tenantLoginMutation(formData);
+            tenantLoginMutation({ email: formData.email, password: formData.password });
         }
         else if(mode === "signup" && role === "Landlord"){
             landlordSignupMutation(formData);
         }
         else{
-            landlordLoginMutation(formData);
+            landlordLoginMutation({ email: formData.email, password: formData.password });
         }
     };
 
@@ -164,8 +167,8 @@ const LoginSignupPage = () => {
                                 </label>
                                 <input
                                     type="text"
-                                    name="fullName"
-                                    value={formData.fullName}
+                                    name="name"
+                                    value={formData.name}
                                     onChange={handleChange}
                                     required
                                     className="w-2xs  px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none"

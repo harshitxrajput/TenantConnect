@@ -3,19 +3,22 @@ import { Mail, Phone, MapPin, Star, Edit, Building, Users, Heart, Home, UserPlus
 import { IoIosChatbubbles } from "react-icons/io";
 import { IoNotifications, IoSearch } from "react-icons/io5";
 
+import Navbar from '../components/Navbar.jsx';
+
 import useAuthUser from '../hooks/useAuthUser.js';
 import { tenantData, landlordData, properties } from '../constants/ProfilePage.js';
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../store/useAuthStore.js";
 
 
 const ProfilePage = () => {
-    const { isLoading, authUser } = useAuthUser();
+    const authUser = useAuthStore((state) => state.authUser);
     console.log(authUser);
     const navigate = useNavigate();
 
     const [currentUser] = useState(tenantData); // Switch between landlordData and tenantData
 
-    const stats = currentUser.type === "landlord"
+    const stats = authUser.role === "landlord"
         ? { totalProperties: 12, totalTenants: 28, reviews: 45 }
         : { totalRentals: 3, reviews: 12, roommatesFound: 2 };
 
@@ -48,54 +51,10 @@ const ProfilePage = () => {
     );
 
     return (
-        <>
-            {/* Header */}
-            <header className="flex justify-between items-center px-8 py-4 bg-white shadow-sm">
-                <div onClick={() => navigate('/')} className="flex items-center gap-2 cursor-pointer select-none">
-                    <img className="w-10 rounded-lg" src="/DemoLogo.jpeg" alt="" />
-                    <span className="font-bold text-xl">TenantConnect</span>
-                </div>
+        <div>
+            <Navbar />
 
-                <div className="flex items-center gap-3">
-                    {!authUser && (
-                        <div className="flex items-center gap-4">
-                            {/* Search Button */}
-                            <button
-                                onClick={() => navigate('/search')}
-                                className="flex cursor-pointer gap-1 items-center text-gray-700 hover:text-green-600 transition text-lg font-semibold"
-                            >
-                                <IoSearch className="text-3xl" />
-                            </button>
-
-                            {/* Chat Button */}
-                            <button
-                                onClick={() => navigate('/chat')}
-                                className="flex cursor-pointer gap-1 items-center text-gray-700 hover:text-green-600 transition text-lg font-semibold"
-                            >
-                                <IoIosChatbubbles className="text-3xl" />
-                            </button>
-
-                            {/* Notification Button */}
-                            <button
-                                onClick={() => navigate('/notifications')}
-                                className="flex cursor-pointer gap-1 items-center text-gray-700 hover:text-green-600 transition text-lg font-semibold"
-                            >
-                                <IoNotifications className="text-3xl" />
-                            </button>
-                    
-                            {/* Profile Button */}
-                            <button
-                                onClick={() => navigate('/profile')}
-                                className="flex cursor-pointer gap-1 items-center text-gray-700 hover:text-green-600 transition text-lg font-semibold"
-                            >
-                                <img className="w-12 rounded-full" src="/DemoLogo.jpeg" alt="profile" />
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </header>
-
-            <div className="min-h-screen flex justify-center gap-10 bg-gray-50">
+            <div className="min-h-screen mt-20 flex justify-center gap-10 bg-gray-50">
                 {/* Left Section */}
                 <div>
                     <div className="max-w-6xl mx-auto px-6 py-10">
@@ -109,14 +68,14 @@ const ProfilePage = () => {
                             <div className="flex-1">
                                 <div className="flex flex-col md:flex-row justify-between mb-4">
                                     <div>
-                                        <h2 className="text-2xl font-bold">{currentUser.name}</h2>
+                                        <h2 className="text-2xl font-bold">{authUser.name}</h2>
                                         <div className="flex items-center gap-2 mt-1">
                                             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm capitalize">
-                                                {currentUser.type}
+                                                {authUser.role}
                                             </span>
                                             <div className="flex items-center gap-1 text-yellow-500">
                                                 <Star className="w-4 h-4 fill-yellow-400" />
-                                                <span>{currentUser.rating}</span>
+                                                <span>{authUser.rating || 4.5}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -124,16 +83,16 @@ const ProfilePage = () => {
                                         <Edit size={16} /> Edit Profile
                                     </button>
                                 </div>
-                                <p className="text-gray-600 mb-4">{currentUser.bio}</p>
+                                <p className="text-gray-600 mb-4">{authUser.bio || 'Update profile to add bio'}</p>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
                                     <div className="flex items-center gap-2">
-                                        <Mail size={16} className="text-green-600" /> {currentUser.email}
+                                        <Mail size={16} className="text-green-600" /> {authUser.email}
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Phone size={16} className="text-green-600" /> {currentUser.phone}
+                                        <Phone size={16} className="text-green-600" />+91 {authUser.phone}
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <MapPin size={16} className="text-green-600" /> {currentUser.location}
+                                        <MapPin size={16} className="text-green-600" /> {authUser.address || "--"}
                                     </div>
                                 </div>
                             </div>
@@ -143,11 +102,11 @@ const ProfilePage = () => {
                         <div className="mb-12">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-2xl font-bold">
-                                    {currentUser.type === "landlord" ? "Your Properties" : "Past Properties"}
+                                    {authUser.role === "landlord" ? "Your Properties" : "Past Properties"}
                                 </h3>
-                                <button onClick={() => navigate(currentUser.type === "landlord" ? "/property/add" : "/search")} className="flex cursor-pointer items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
+                                <button onClick={() => navigate(authUser.role === "landlord" ? "/property/add" : "/search")} className="flex cursor-pointer items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">
                                     <Plus size={16} />
-                                    {currentUser.type === "landlord" ? "Add Property" : "Find Properties"}
+                                    {authUser.role === "landlord" ? "Add Property" : "Find Properties"}
                                 </button>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -158,7 +117,7 @@ const ProfilePage = () => {
                         </div>
 
                         {/* Roommates Section (for tenants only) */}
-                        {currentUser.type === "tenant" && (
+                        {authUser.role === "tenant" && (
                             <div>
                                 <div className="flex justify-between items-center mb-6">
                                     <h3 className="text-2xl font-bold">Potential Roommates</h3>
@@ -200,11 +159,11 @@ const ProfilePage = () => {
                 <div className="pt-10">
                     {/* Stats Section */}
                     <div className="grid select-none cursor-pointer grid-cols-1 md:grid-cols-1 gap-6 mb-1">
-                        {currentUser.type === "landlord" ? (
+                        {authUser.role === "landlord" ? (
                             <>
-                                <StatCard icon={Building} label="Properties Listed" value={stats.totalProperties} />
+                                <StatCard icon={Building} label="Properties Listed" value={authUser.properties.length} />
                                 <StatCard icon={Users} label="Total Tenants" value={stats.totalTenants} />
-                                <StatCard icon={Star} label="Reviews" value={stats.reviews} />
+                                <StatCard icon={Star} label="Reviews" value={authUser.reviews.length} />
                                 <StatCard icon={Heart} label="Avg Rating" value={currentUser.rating} />
                             </>
                         ) : (
@@ -219,7 +178,7 @@ const ProfilePage = () => {
 
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
