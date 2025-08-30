@@ -13,6 +13,7 @@ import { isLoggedIn } from './middlewares/isLoggedIn.middleware.js';
 //Routes
 import landlordRoutes from './routes/landlord.routes.js';
 import tenantRoutes from './routes/tenant.routes.js';
+import propertyRoutes from './routes/property.routes.js';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 app.use('/api/landlord', landlordRoutes);
 app.use('/api/tenant', tenantRoutes);
+app.use('/api/property', propertyRoutes);
 
 app.post('/api/logout', isLoggedIn, (req, res) => {
     try{
