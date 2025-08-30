@@ -194,7 +194,7 @@ const LoginSignupPage = () => {
                 </div>
 
                 {/* Footer */}
-                <p className="text-center mt-6 text-gray-600">
+                <p className="text-center select-none mt-6 text-gray-600">
                     {mode === "signup" ? (
                         <>
                             Already have an account?{" "}
