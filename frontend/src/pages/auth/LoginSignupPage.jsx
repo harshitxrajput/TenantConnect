@@ -1,10 +1,53 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
+
+import { landlordLogin, landlordSignup, tenantLogin, tenantSignup } from "../../lib/Api";
+import { toast } from "react-toastify";
 
 const LoginSignupPage = () => {
+    const queryClient = useQueryClient();
+
+    //Landlord Mutations
+    const { mutate:landlordSignupMutation, isPending:landlordSignupLoading, error:landlordSignupError } = useMutation({
+        mutationFn: landlordSignup,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authUser"] })
+            toast.success("Signed Up Successfully")
+        },
+        onError: (err) => toast.error(err.message || "Signup Failed")
+    });
+    const { mutate:landlordLoginMutation, isPending:landlordLoginLoading, error:landlordLoginError } = useMutation({
+        mutationFn: landlordLogin,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authUser"] })
+            toast.success("Logged in Successfully")
+        },
+        onError: (err) => toast.error(err.message || "Login Failed")
+    });
+
+    //Tenant Mutations
+    const { mutate:tenantSignupMutation, isPending:tenantSignupLoading, error:tenantSignupError } = useMutation({
+        mutationFn: tenantSignup,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authUser"] })
+            toast.success("Signed up Successfully")
+        },
+        onError: (err) => toast.error(err.message || "Signup Failed")
+    });
+    const { mutate:tenantLoginMutation, isPending:tenantLoginLoading, error:tenantLoginError } = useMutation({
+        mutationFn: tenantLogin,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["authUser"] })
+            toast.success("Logged in Successfully")
+        },
+        onError: (err) => toast.error(err.message || "Login Failed")
+    })
+
     const [role, setRole] = useState("Tenant"); // Tenant | Landlord
     const [mode, setMode] = useState("signup"); // signup | login
     const [formData, setFormData] = useState({
-        fullName: "",
+        name: "",
         email: "",
         password: "",
         phone: "",
@@ -26,18 +69,20 @@ const LoginSignupPage = () => {
         console.log(`${mode.toUpperCase()} Data: `, formData);
         
         if(mode === "signup" && role === "Tenant"){
-            signupTenant.mutate();
+            tenantSignupMutation(formData);
         }
         else if(mode === "login" && role === "Tenant"){
-
+            tenantLoginMutation(formData);
         }
         else if(mode === "signup" && role === "Landlord"){
-
+            landlordSignupMutation(formData);
         }
         else{
-
+            landlordLoginMutation(formData);
         }
     };
+
+    const isLoading = landlordSignupLoading || landlordLoginLoading || tenantSignupLoading || tenantLoginLoading;
 
     return (
         <div className="flex justify-center items-center gap-20 min-h-screen w-screen bg-gradient-to-br from-green-100 via-white to-green-200">
@@ -105,7 +150,7 @@ const LoginSignupPage = () => {
                 </div>
                   
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-5 min-h-3xl max-h-xl">
+                <form onSubmit={handleSubmit} className="space-y-5 min-h-4xl max-h-xl">
                     {mode === "signup" && (
                         <div className="grid grid-cols-2 ">
                             <div>
@@ -164,14 +209,22 @@ const LoginSignupPage = () => {
                         />
                     </div>
                 </div>
-                  <button
+                    <button
                         type="submit"
-                        className="w-full bg-green-600 cursor-pointer hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition transform hover:scale-[1.02]"
-                  >
-                        {mode === "signup"
-                            ? `Sign Up as ${role}`
-                            : `Login as ${role}`}
-                  </button>
+                        disabled={isLoading}
+                        className="w-full flex justify-center items-center bg-green-600 cursor-pointer hover:bg-green-700 text-white py-2 rounded-lg font-semibold transition transform hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                        {isLoading ? (
+                            <span className="flex items-center gap-2">
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                                Processing...
+                            </span>
+                        ) : mode === "signup" ? (
+                            `Sign Up as ${role}`
+                        ) : (
+                            `Login as ${role}`
+                        )}
+                    </button>
                 </form>
 
                 {/* Divider */}
