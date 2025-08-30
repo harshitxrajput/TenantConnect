@@ -1,30 +1,34 @@
 import { axiosInstance } from "./Axios";
 
 export const getAuthUser = async () => {
-    //Tenant Profile
-    try{
-        const tenantResponse = await axiosInstance.get("/tenant/profile");
-        if(tenantResponse?.data)
-        {
-            return { role: "Tenant", user: tenantResponse.data }
+    const endpoints = [
+        "/tenant/profile",
+        "/landlord/profile"
+    ];
+  
+    for (let endpoint of endpoints) {
+        try {
+            const res = await axiosInstance.get(endpoint);
+            console.log(res.data);
+            if (res.data) {
+                return {
+                    ...res.data,
+                    role: endpoint.split("/")[1]
+                };
+            }
+        } catch (err) {
+            if (err.response?.status === 401 || err.response?.status === 404) {
+                continue;
+            } else {
+                throw err;
+            }
         }
-    }
-    catch(err){
-        console.log("Not a tenant: ", err.message);
-        return null;
     }
 
-    //Landlord Profile
-    try{
-        const landlordResponse = await axiosInstance.get("/landlord/profile");
-        if(landlordResponse?.data){
-            return { role: "Landlord", user: landlordResponse.data };
-        }
-    }
-    catch(err){
-        console.log("Not a landlord: ", err.message);
-    }
-}
+  
+    // No user found
+    return null;
+};
 
 export const landlordSignup = async(landlordSignupData) => {
     try{

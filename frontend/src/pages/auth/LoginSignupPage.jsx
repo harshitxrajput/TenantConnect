@@ -4,30 +4,35 @@ import { Loader2 } from "lucide-react";
 
 import { landlordLogin, landlordSignup, tenantLogin, tenantSignup } from "../../lib/Api";
 import { toast } from "react-toastify";
+import useAuthUser from "../../hooks/useAuthUser";
+import { useNavigate } from "react-router-dom";
 
 const LoginSignupPage = () => {
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     //Landlord Mutations
-    const { mutate:landlordSignupMutation, isPending:landlordSignupLoading, error:landlordSignupError } = useMutation({
+    const { mutate:landlordSignupMutation, isPending:landlordSignupLoading } = useMutation({
         mutationFn: landlordSignup,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["authUser"] })
-            toast.success("Signed Up Successfully")
+            toast.success("Signed Up Successfully");
+            navigate('/');
         },
         onError: (err) => toast.error(err.message || "Signup Failed")
     });
-    const { mutate:landlordLoginMutation, isPending:landlordLoginLoading, error:landlordLoginError } = useMutation({
+    const { mutate:landlordLoginMutation, isPending:landlordLoginLoading } = useMutation({
         mutationFn: landlordLogin,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["authUser"] })
-            toast.success("Logged in Successfully")
+            toast.success("Logged in Successfully");
+            navigate('/');
         },
         onError: (err) => toast.error(err.message || "Login Failed")
     });
 
     //Tenant Mutations
-    const { mutate:tenantSignupMutation, isPending:tenantSignupLoading, error:tenantSignupError } = useMutation({
+    const { mutate:tenantSignupMutation, isPending:tenantSignupLoading } = useMutation({
         mutationFn: tenantSignup,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["authUser"] })
@@ -35,7 +40,7 @@ const LoginSignupPage = () => {
         },
         onError: (err) => toast.error(err.message || "Signup Failed")
     });
-    const { mutate:tenantLoginMutation, isPending:tenantLoginLoading, error:tenantLoginError } = useMutation({
+    const { mutate:tenantLoginMutation, isPending:tenantLoginLoading } = useMutation({
         mutationFn: tenantLogin,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["authUser"] })

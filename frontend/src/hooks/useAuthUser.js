@@ -1,14 +1,34 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAuthUser } from "../lib/Api";
+import useAuthStore from "../store/useAuthStore";
 
 const useAuthUser = () => {
-    const authUser = useQuery({
+    const authUserFromStore = useAuthStore((state) => state.authUser);
+    const setAuthUser = useAuthStore((state) => state.setAuthUser);
+
+    const authUserQuery = useQuery({
         queryKey: ["authUser"],
-        queryFn: getAuthUser,
-        retry: false
+        queryFn: async () => {
+            // if already in Zustand, just return it instead of calling backend
+            if (authUserFromStore) {
+                return authUserFromStore;
+            }
+            const data = await getAuthUser();
+            setAuthUser(data);
+            return data;
+        },
+        retry: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        refetchOnMount: false,
+        staleTime: Infinity, // ✅ data is always fresh
+        cacheTime: Infinity, // ✅ never garbage collect
     });
 
-    return { isLoading: authUser.isLoading, authUser: authUser.data?.user }
+    return { 
+        isLoading: authUserQuery.isLoading, 
+        authUser: authUserFromStore ?? authUserQuery.data 
+    }
 }
 
 export default useAuthUser;

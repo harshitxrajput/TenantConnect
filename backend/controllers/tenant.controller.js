@@ -72,7 +72,7 @@ export const getTenantProfileController = async (req, res) => {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
-        res.status(200).json({ success: true, profile: tenantProfile });
+        res.status(200).json({ success: true, user: tenantProfile });
     }
     catch(err){
         console.log("Error in getTenantProfileController: ", err.message);
