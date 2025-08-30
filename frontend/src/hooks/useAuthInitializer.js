@@ -11,7 +11,8 @@ export default function useAuthInitializer() {
         if (!authUser) {
             getAuthUser()
             .then((data) => {
-                setAuthUser(data?.user ?? null);
+                setAuthUser(data ?? null);
+                console.log(data);
             })
             .catch(() => {
                 setAuthUser(null);

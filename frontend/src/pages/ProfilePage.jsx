@@ -92,7 +92,7 @@ const ProfilePage = () => {
                                         <Phone size={16} className="text-green-600" />+91 {authUser.user.phone}
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <MapPin size={16} className="text-green-600" /> {authUser.user.address || "--"}
+                                        <MapPin size={16} className="text-green-600" /> {authUser.user.address.country || "--"}
                                     </div>
                                 </div>
                             </div>
