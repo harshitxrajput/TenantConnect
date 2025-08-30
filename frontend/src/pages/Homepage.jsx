@@ -54,7 +54,7 @@ const Homepage = () => {
             <Navbar />
 
             {/* Main Section */}
-            <main className="px-8 py-10 pt-5">
+            <main className="px-8 py-10 pt-5 mt-25">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-semibold">Discover places to rent</h1>
                     <button className="text-lg bg-green-600 rounded-lg px-2 py-1 text-white font-semibold cursor-pointer">View more</button>

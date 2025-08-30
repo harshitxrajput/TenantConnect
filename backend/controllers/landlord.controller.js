@@ -55,7 +55,7 @@ export const loginLandlordController = async (req, res) => {
             sameSite: "strict"
         })
 
-        res.status(200).json({ success: true, message: "Login Successful", landlord: existingLandlord, token: token });
+        res.status(200).json({ success: true, message: "Login Successful" });
     }
     catch(err){
         console.log("Error in loginLandlordController: ", err.message);

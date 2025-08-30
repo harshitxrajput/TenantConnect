@@ -17,8 +17,9 @@ const LoginSignupPage = () => {
     //Landlord Mutations
     const { mutate:landlordSignupMutation, isPending:landlordSignupLoading } = useMutation({
         mutationFn: landlordSignup,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["authUser"] })
+        onSuccess: async () => {
+            const profile = await getAuthUser(); // fetch user data
+            setAuthUser(profile);
             toast.success("Signed Up Successfully");
             navigate('/');
         },
@@ -38,17 +39,21 @@ const LoginSignupPage = () => {
     //Tenant Mutations
     const { mutate:tenantSignupMutation, isPending:tenantSignupLoading } = useMutation({
         mutationFn: tenantSignup,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["authUser"] })
-            toast.success("Signed up Successfully")
+        onSuccess: async () => {
+            const profile = await getAuthUser(); // fetch user data
+            setAuthUser(profile);
+            toast.success("Signed up Successfully");
+            navigate('/');
         },
         onError: (err) => toast.error(err.message || "Signup Failed")
     });
     const { mutate:tenantLoginMutation, isPending:tenantLoginLoading } = useMutation({
         mutationFn: tenantLogin,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["authUser"] })
-            toast.success("Logged in Successfully")
+        onSuccess: async () => {
+            const profile = await getAuthUser(); // fetch user data
+            setAuthUser(profile);
+            toast.success("Logged in Successfully");
+            navigate('/');
         },
         onError: (err) => toast.error(err.message || "Login Failed")
     })

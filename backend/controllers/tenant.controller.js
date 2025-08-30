@@ -37,7 +37,7 @@ export const loginTenantController = async (req, res) => {
     try{
         const { email, password } = req.body;
 
-        const existingTenant = await tenantModel.findOne({ email: email });
+        const existingTenant = await tenantModel.findOne({ email: email }).select("+password");
         if(!existingTenant){
             return res.status(404).json({ success: false, message: "User not found" });
         }
@@ -55,7 +55,7 @@ export const loginTenantController = async (req, res) => {
             sameSite: "strict"
         });
 
-        res.status(200).json({ success: true, message: "Login successful", tenant: existingTenant, token: token });
+        res.status(200).json({ success: true, message: "Login successful" });
     }
     catch(err){
         console.log("Error in loginTenantController: ", err.message);

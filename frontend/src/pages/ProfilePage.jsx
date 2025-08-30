@@ -68,14 +68,14 @@ const ProfilePage = () => {
                             <div className="flex-1">
                                 <div className="flex flex-col md:flex-row justify-between mb-4">
                                     <div>
-                                        <h2 className="text-2xl font-bold">{authUser.name}</h2>
+                                        <h2 className="text-2xl font-bold">{authUser.user.name}</h2>
                                         <div className="flex items-center gap-2 mt-1">
                                             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm capitalize">
                                                 {authUser.role}
                                             </span>
                                             <div className="flex items-center gap-1 text-yellow-500">
                                                 <Star className="w-4 h-4 fill-yellow-400" />
-                                                <span>{authUser.rating || 4.5}</span>
+                                                <span>{authUser.user.rating || 4.5}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -83,16 +83,16 @@ const ProfilePage = () => {
                                         <Edit size={16} /> Edit Profile
                                     </button>
                                 </div>
-                                <p className="text-gray-600 mb-4">{authUser.bio || 'Update profile to add bio'}</p>
+                                <p className="text-gray-600 mb-4">{authUser.user.bio || 'Update profile to add bio'}</p>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
                                     <div className="flex items-center gap-2">
-                                        <Mail size={16} className="text-green-600" /> {authUser.email}
+                                        <Mail size={16} className="text-green-600" /> {authUser.user.email}
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <Phone size={16} className="text-green-600" />+91 {authUser.phone}
+                                        <Phone size={16} className="text-green-600" />+91 {authUser.user.phone}
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <MapPin size={16} className="text-green-600" /> {authUser.address || "--"}
+                                        <MapPin size={16} className="text-green-600" /> {authUser.user.address || "--"}
                                     </div>
                                 </div>
                             </div>
@@ -161,17 +161,17 @@ const ProfilePage = () => {
                     <div className="grid select-none cursor-pointer grid-cols-1 md:grid-cols-1 gap-6 mb-1">
                         {authUser.role === "landlord" ? (
                             <>
-                                <StatCard icon={Building} label="Properties Listed" value={authUser.properties.length} />
+                                <StatCard icon={Building} label="Properties Listed" value={authUser.user.properties.length} />
                                 <StatCard icon={Users} label="Total Tenants" value={stats.totalTenants} />
-                                <StatCard icon={Star} label="Reviews" value={authUser.reviews.length} />
+                                <StatCard icon={Star} label="Reviews" value={authUser.user.reviews.length} />
                                 <StatCard icon={Heart} label="Avg Rating" value={currentUser.rating} />
                             </>
                         ) : (
                             <>
                                 <StatCard icon={Home} label="Rentals" value={stats.totalRentals} />
                                 <StatCard icon={UserPlus} label="Roommates Found" value={stats.roommatesFound} />
-                                <StatCard icon={Star} label="Reviews" value={stats.reviews} />
-                                <StatCard icon={Heart} label="Rating" value={currentUser.rating} />
+                                <StatCard icon={Star} label="Reviews" value={authUser.user.reviews.length} />
+                                <StatCard icon={Heart} label="Rating" value={authUser.user.rating || 4.5} />
                             </>
                         )}
                     </div>
