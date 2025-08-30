@@ -92,8 +92,8 @@ landlordSchema.statics.hashPassword = async function(password){
     return bcrypt.hash(password, 12);
 }
 
-landlordSchema.methods.comparePassword = function(enteredPassword){
-    return bcrypt.compare(enteredPassword, this.password);
+landlordSchema.methods.comparePassword = async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword, this.password);
 }
 
 landlordSchema.methods.generateAuthToken = function(){
