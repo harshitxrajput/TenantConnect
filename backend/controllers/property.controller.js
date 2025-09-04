@@ -255,4 +255,49 @@ export const getTenantFavouritesController = async (req, res) => {
     }
 }
 
-export const 
+export const addTenantFavouritePropertyController = async (req, res) => {
+    try{
+        const tenantId = req.user?._id;
+        const { propertyId } = req.params;
+
+        const property = await propertyModel.findById(propertyId);
+        if(!property){
+            return res.status(404).json({ success: false, message: "Property not found" });
+        }
+
+        const tenant = await tenantModel.findById(tenantId);
+        if(tenant.favourites.includes(propertyId)){
+            return res.status(200).json({ success: true, message: "Property already in favourites" });
+        }
+
+        tenant.favourites.push(propertyId);
+        await tenant.save();
+
+        res.status(200).json({ success: true, message: "Property added to favourites", favourites: tenant.favourites });
+    }
+    catch(err){
+        console.log("Error in addTenantFavouriteController: ", err.message);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+export const removeTenantFavouritePropertyController = async (req, res) => {
+    try{
+        const tenantId = req.user?._id;
+        const { propertyId } = req.params;
+
+        const tenant = await tenantModel.findById(tenantId);
+        if(!tenant.favourites.includes(propertyId)){
+            return res.status(404).json({ success: false, message: "Property not in favourites" });
+        }
+
+        tenant.favourites = tenant.favourites.filter(_id => _id.toString() !== propertyId);
+        await tenant.save();
+
+        res.status(200).json({ success: true, message: "Property removed from favourites", favourites: tenant.favourites })
+    }
+    catch(err){
+        console.log("Error in removeTenantFavouritePropertyController: ", err.message);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
