@@ -79,3 +79,87 @@ export const getTenantProfileController = async (req, res) => {
         res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 }
+
+export const updateTenantProfileController = async (req, res) => {
+    try{
+        const tenantId = req.user?._id;
+        const updateData = req.body;
+
+        delete updateData.role;
+        delete updateData.password;
+        delete updateData._id;
+
+        if (updateData.address) {
+            const addressUpdates = {};
+            Object.keys(updateData.address).forEach(key => {
+                addressUpdates[`address.${key}`] = updateData.address[key];
+            });
+            Object.assign(updateData, addressUpdates);
+            delete updateData.address;
+        }
+
+        if (updateData.documents) {
+            const documentUpdates = {};
+            Object.keys(updateData.documents).forEach(key => {
+                documentUpdates[`documents.${key}`] = updateData.documents[key];
+            });
+            Object.assign(updateData, documentUpdates);
+            delete updateData.documents;
+        }
+
+        if (updateData.paymentDetails) {
+            const paymentUpdates = {};
+            Object.keys(updateData.paymentDetails).forEach(key => {
+                paymentUpdates[`paymentDetails.${key}`] = updateData.paymentDetails[key];
+            });
+            Object.assign(updateData, paymentUpdates);
+            delete updateData.paymentDetails;
+        }
+
+        const updatedTenant = await tenantModel.findByIdAndUpdate(
+            tenantId,
+            { $set: updateData },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedTenant) {
+            return res.status(404).json({ success: false, message: "Tenant not found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            tenant: updatedTenant
+        });
+    }
+    catch(err){
+        console.log("Error in updateTenantProfileController: ", err.message);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}
+
+export const changeTenantPasswordController = async (req, res) => {
+    try{
+        const tenantId = req.user?._id;
+        const { currentPassword, newPassword } = req.body;
+
+        const tenant = await tenantModel.findById(tenantId).select("+password");
+        if(!tenant){
+            return res.status(404).json({ success: false, message: "Tenant not found" });
+        }
+
+        const isMatch = await tenant.comparePassword(currentPassword);
+        if(!isMatch){
+            return res.status(401).json({ success: false, message: "Current Password is incorrect" });
+        }
+
+        tenant.password = await tenantModel.hashPassword(newPassword);
+        await tenant.save();
+
+        res.status(200).json({ success: false, message: "Password changed successfully" });
+    }
+    catch(err){
+        console.log("Error in changeTenantPasswordController: ", err.message);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+}

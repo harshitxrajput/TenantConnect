@@ -2,6 +2,8 @@ import express from 'express';
 
 import {
     addTenantFavouritePropertyController,
+    cancelTenantBookingController,
+    createBookingRequestController,
     createLandlordPropertyController,
     deleteLandlordPropertyController,
     getAvailablePropertiesController,
@@ -9,6 +11,8 @@ import {
     getLandlordPropertyByIdController,
     getPropertyByIdController,
     getTenantFavouritesController,
+    getTenantRequestsController,
+    removeTenantFavouritePropertyController,
     updateLandlordPropertyController
 } from '../controllers/property.controller.js';
 import { isLoggedIn } from '../middlewares/isLoggedIn.middleware.js';
@@ -30,6 +34,6 @@ router.delete('/:id', isLoggedIn, authorizeRoles(["landlord"]), deleteLandlordPr
 //Tenant Specific Routes
 router.get('/tenant/favourites', isLoggedIn, authorizeRoles(["tenant"]), getTenantFavouritesController);
 router.post('/tenant/favourites/:propertyId', isLoggedIn, authorizeRoles(["tenant"]), addTenantFavouritePropertyController);
-router.delete('/tenant/favourites/:propertyId', isLoggedIn, authorizeRoles(["tenant"]), );
+router.delete('/tenant/favourites/:propertyId', isLoggedIn, authorizeRoles(["tenant"]), removeTenantFavouritePropertyController);
 
 export default router;

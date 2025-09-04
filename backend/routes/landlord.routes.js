@@ -7,6 +7,7 @@ import {
     registerLandlordController
 } from '../controllers/landlord.controller.js';
 import { isLoggedIn } from '../middlewares/isLoggedIn.middleware.js';
+import { authorizeRoles } from '../middlewares/authorizeRoles.middleware.js';
 
 const router = express.Router();
 
@@ -14,6 +15,6 @@ router.post('/register', registerLandlordController);
 
 router.post('/login', loginLandlordController);
 
-router.get('/profile', isLoggedIn, getLandlordProfileController);
+router.get('/profile', isLoggedIn, authorizeRoles(["landlord"]), getLandlordProfileController);
 
 export default router;
