@@ -9,7 +9,6 @@ export const getAuthUser = async () => {
     for (let endpoint of endpoints) {
         try {
             const res = await axiosInstance.get(endpoint);
-            console.log(res.data);
             if (res.data) {
                 return {
                     ...res.data,

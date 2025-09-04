@@ -2,8 +2,6 @@ import express from 'express';
 
 import {
     addTenantFavouritePropertyController,
-    cancelTenantBookingController,
-    createBookingRequestController,
     createLandlordPropertyController,
     deleteLandlordPropertyController,
     getAvailablePropertiesController,
@@ -11,7 +9,6 @@ import {
     getLandlordPropertyByIdController,
     getPropertyByIdController,
     getTenantFavouritesController,
-    getTenantRequestsController,
     removeTenantFavouritePropertyController,
     updateLandlordPropertyController
 } from '../controllers/property.controller.js';

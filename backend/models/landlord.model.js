@@ -40,7 +40,7 @@ const landlordSchema = new mongoose.Schema({
         city: { type: String, trim: true },
         state: { type: String, trim: true },
         pincode: { type: String, trim: true },
-        country: { type: String, deafult: "India" }
+        country: { type: String, default: "India" }
     },
 
     documents: {

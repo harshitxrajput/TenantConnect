@@ -6,17 +6,20 @@ import useAuthStore from "../store/useAuthStore.js";
 export default function useAuthInitializer() {
     const authUser = useAuthStore((state) => state.authUser);
     const setAuthUser = useAuthStore((state) => state.setAuthUser);
+    const setAuthLoaded = useAuthStore((state) => state.setAuthLoaded);
 
     useEffect(() => {
         if (!authUser) {
             getAuthUser()
             .then((data) => {
                 setAuthUser(data ?? null);
-                console.log(data);
             })
             .catch(() => {
                 setAuthUser(null);
             });
+        }
+        else{
+            setAuthLoaded();
         }
     }, []);
 }

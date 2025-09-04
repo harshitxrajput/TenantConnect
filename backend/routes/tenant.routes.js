@@ -17,7 +17,7 @@ router.post('/register', registerTenantController);
 
 router.post('/login', loginTenantController);
 
-router.get('/profile', isLoggedIn, authorizeRoles(["tenant"]), getTenantProfileController);
+router.get('/profile', isLoggedIn, getTenantProfileController);
 
 router.put('/profile', isLoggedIn, authorizeRoles(["tenant"]), updateTenantProfileController);
 

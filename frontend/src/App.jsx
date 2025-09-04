@@ -6,12 +6,18 @@ import ProfilePage from "./pages/ProfilePage"
 import useAuthInitializer from "./hooks/useAuthInitializer"
 import useAuthStore from "./store/useAuthStore"
 import PropertyDetailsPage from "./pages/PropertyDetailsPage"
-
+import AddPropertyPage from "./pages/AddPropertyPage"
+import PageLoader from "./pages/PageLoader"
 
 const App = () => {
     useAuthInitializer();
     const authUser = useAuthStore((state) => state.authUser);
+    const isAuthLoaded = useAuthStore((state) => state.isAuthLoaded);
     console.log(authUser);
+    if(!isAuthLoaded){
+        return <PageLoader />
+    }
+
     return (
         <div>
             <Routes>
@@ -19,11 +25,13 @@ const App = () => {
 
                 <Route path="/" element={<Homepage />}/>
 
+                <Route path="/property/:id" element={<PropertyDetailsPage />} />
+
                 <Route path="/search" element={<SearchPage />} />
 
                 <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to={"/signup"} />} />
 
-                <Route path="/property/:id" element={<PropertyDetailsPage />} />
+                <Route path="/property/add" element={authUser ? <AddPropertyPage /> : <Navigate to={"/signup"} />} />
             </Routes>
         </div>
   )

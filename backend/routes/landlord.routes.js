@@ -15,6 +15,6 @@ router.post('/register', registerLandlordController);
 
 router.post('/login', loginLandlordController);
 
-router.get('/profile', isLoggedIn, authorizeRoles(["landlord"]), getLandlordProfileController);
+router.get('/profile', isLoggedIn, getLandlordProfileController);
 
 export default router;
