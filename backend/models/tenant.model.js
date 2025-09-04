@@ -85,6 +85,13 @@ const tenantSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Reviews"
         }
+    ],
+
+    favourites: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Property"
+        }
     ]
 }, { timestamps: true });
 
