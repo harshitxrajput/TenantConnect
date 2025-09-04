@@ -1,28 +1,35 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const HomePropertyListing = ({property}) => {
+const HomePropertyListing = ({ property }) => {
     const navigate = useNavigate();
 
     return (
-        <div onClick={() => navigate('/property/id')} className='cursor-pointer'>
+        <div
+            onClick={() => navigate(`/property/${property.id}`)}
+            className="cursor-pointer flex-shrink-0 w-52 sm:w-60 md:w-72 lg:w-80 xl:w-96 rounded-xl shadow-md hover:shadow-xl transition bg-white overflow-hidden"
+        >
+            {/* Image */}
             <img
                 src={property.image}
                 alt={property.title}
-                className="rounded-t-2xl h-48 w-full object-cover"
+                className="w-full h-36 sm:h-44 md:h-48 lg:h-56 xl:h-64 object-cover rounded-t-xl"
             />
-                <div className="p-4">
-                    <h2 className="font-semibold text-lg">{property.title}</h2>
-                    <p className="text-sm text-gray-500">{property.location}</p>
 
-                <div className="flex justify-between items-center mt-2">
-                    <span className="text-gray-700 text-sm">
-                        {property.beds} beds · {property.baths} baths
-                    </span>
+            {/* Content */}
+            <div className="p-3 flex flex-col justify-between">
+                <h3 className="text-sm sm:text-base lg:text-lg xl:text-xl font-semibold truncate">{property.title}</h3>
+                <p className="text-xs sm:text-sm text-gray-500 truncate">{property.location}</p>
+
+                {/* Features */}
+                <div className="flex flex-wrap gap-2 mt-1 text-xs sm:text-sm text-gray-700">
+                    <span className="flex items-center gap-1">🛏 {property.beds}</span>
+                    <span className="flex items-center gap-1">🛁 {property.baths}</span>
                     <span className="font-semibold text-green-700">{property.price}</span>
                 </div>
 
-                <div className="flex flex-wrap gap-2 mt-3">
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1 mt-1">
                     {property.tags.map((tag, i) => (
                         <span
                             key={i}
@@ -33,20 +40,21 @@ const HomePropertyListing = ({property}) => {
                     ))}
                 </div>
 
-                <div className="flex justify-between items-center mt-4">
+                {/* Actions */}
+                <div className="flex justify-between items-center mt-2">
                     <a
                         href="#"
-                        className="text-green-600 text-sm font-medium hover:underline"
+                        className="text-green-600 text-xs sm:text-sm font-medium hover:underline"
                     >
                         View details
                     </a>
-                    <button className="bg-green-600 cursor-pointer hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                    <button className="hidden sm:block bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-xs sm:text-sm font-medium transition">
                         Book
                     </button>
                 </div>
             </div>
         </div>
-  )
-}
+    );
+};
 
-export default HomePropertyListing
+export default HomePropertyListing;

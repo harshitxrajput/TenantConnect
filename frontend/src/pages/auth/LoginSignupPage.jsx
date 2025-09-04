@@ -98,27 +98,28 @@ const LoginSignupPage = () => {
     const isLoading = landlordSignupLoading || landlordLoginLoading || tenantSignupLoading || tenantLoginLoading;
 
     return (
-        <div className="flex justify-center items-center gap-20 min-h-screen w-screen bg-gradient-to-br from-green-100 via-white to-green-200">
-            {/* Right Section */}
-            <div className="bg-white shadow-2xl rounded-2xl p-8 w-2xl relative overflow-hidden">
+        <div className="flex flex-col-reverse md:flex-row gap-10 justify-center items-center min-h-screen w-screen bg-gradient-to-br from-green-100 via-white to-green-200 px-4 sm:px-6 lg:px-12 py-8">
+
+            {/* Right Section - Form Card */}
+            <div className="bg-white shadow-2xl rounded-3xl p-6 sm:p-8 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl relative overflow-hidden flex-shrink">
 
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <h2 className="text-4xl font-extrabold text-green-700">
+                <div className="text-center mb-6 sm:mb-8">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-green-700">
                         {mode === "signup" ? "Create Account" : "Welcome Back"}
                     </h2>
-                    <p className="text-gray-500 mt-2">
+                    <p className="text-gray-500 mt-2 text-sm sm:text-base">
                         {mode === "signup"
                             ? "Join the community by creating an account"
                             : "Log in to access your account"}
                     </p>
                 </div>
-
+                        
                 {/* Role Switch */}
-                <div className="flex justify-center mb-6">
+                <div className="flex justify-center mb-4 sm:mb-6 space-x-2 sm:space-x-4">
                     <button
                         onClick={() => handleRoleSwitch("Tenant")}
-                        className={`px-6 py-2 cursor-pointer rounded-tl-xl rounded-bl-xl font-medium transition ${
+                        className={`flex-1 px-4 sm:px-6 py-2 cursor-pointer rounded-l-xl font-medium transition ${
                             role === "Tenant"
                                 ? "bg-green-600 text-white shadow-md"
                                 : "bg-gray-100 text-gray-700"
@@ -128,7 +129,7 @@ const LoginSignupPage = () => {
                     </button>
                     <button
                         onClick={() => handleRoleSwitch("Landlord")}
-                        className={`px-6 py-2 cursor-pointer rounded-tr-xl rounded-br-xl font-medium transition ${
+                        className={`flex-1 px-4 sm:px-6 py-2 cursor-pointer rounded-r-xl font-medium transition ${
                             role === "Landlord"
                                 ? "bg-green-600 text-white shadow-md"
                                 : "bg-gray-100 text-gray-700"
@@ -137,12 +138,12 @@ const LoginSignupPage = () => {
                         Landlord
                     </button>
                 </div>
-                  
-                {/* Mode Switch (Login / Signup) */}
-                <div className="flex w-full justify-center mb-6">
+                    
+                {/* Mode Switch */}
+                <div className="flex w-full justify-center mb-4 sm:mb-6">
                     <button
                         onClick={() => setMode("login")}
-                        className={`px-6 py-2 w-1/2 cursor-pointer rounded-tl-xl rounded-bl-xl font-medium transition ${
+                        className={`w-1/2 px-4 sm:px-6 py-2 cursor-pointer rounded-l-xl font-medium transition ${
                             mode === "login"
                                 ? "bg-green-600 text-white shadow-lg"
                                 : "bg-gray-100 text-gray-600"
@@ -152,7 +153,7 @@ const LoginSignupPage = () => {
                     </button>
                     <button
                         onClick={() => setMode("signup")}
-                        className={`px-6 py-2 w-1/2 cursor-pointer rounded-tr-xl rounded-br-xl font-medium transition ${
+                        className={`w-1/2 px-4 sm:px-6 py-2 cursor-pointer rounded-r-xl font-medium transition ${
                             mode === "signup"
                                 ? "bg-green-600 text-white shadow-lg"
                                 : "bg-gray-100 text-gray-600"
@@ -161,13 +162,13 @@ const LoginSignupPage = () => {
                         Sign Up
                     </button>
                 </div>
-                  
+                    
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-5 min-h-4xl max-h-xl">
+                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                     {mode === "signup" && (
-                        <div className="grid grid-cols-2 ">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
-                                <label className="block text-gray-700 font-medium">
+                                <label className="block text-gray-700 font-medium text-sm sm:text-base">
                                     Full Name
                                 </label>
                                 <input
@@ -176,52 +177,56 @@ const LoginSignupPage = () => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     required
-                                    className="w-2xs  px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none"
+                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none transition"
                                     placeholder="Enter your full name"
                                 />
                             </div>
-
+                    
                             <div>
-                                <label className="block text-gray-700 font-medium">Phone</label>
+                                <label className="block text-gray-700 font-medium text-sm sm:text-base">
+                                    Phone
+                                </label>
                                 <input
                                     type="tel"
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
                                     required
-                                    className="w-2xs  px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none"
+                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none transition"
                                     placeholder="Enter phone number"
                                 />
                             </div>
                         </div>
                     )}
-                <div className={mode === "signup" ? "grid grid-cols-2" : "flex flex-col gap-5"}>
-                    <div>
-                        <label className="block text-gray-700 font-medium">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            className={mode === "signup" ? "w-2xs px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none" : "w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none"}
-                            placeholder="Enter your email"
-                        />
+
+                    <div className={mode === "signup" ? "grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6" : "flex flex-col gap-4 sm:gap-5"}>
+                        <div>
+                            <label className="block text-gray-700 font-medium text-sm sm:text-base">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none transition"
+                                placeholder="Enter your email"
+                            />
+                        </div>
+                
+                        <div>
+                            <label className="block text-gray-700 font-medium text-sm sm:text-base">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none transition"
+                                placeholder="Enter your password"
+                            />
+                        </div>
                     </div>
                 
-                    <div>
-                        <label className="block text-gray-700 font-medium">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                            className={mode === "signup" ? "w-2xs px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none" : "w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-green-400 outline-none"}
-                            placeholder="Enter your password"
-                        />
-                    </div>
-                </div>
                     <button
                         type="submit"
                         disabled={isLoading}
@@ -239,28 +244,28 @@ const LoginSignupPage = () => {
                         )}
                     </button>
                 </form>
-
+                    
                 {/* Divider */}
-                <div className="flex items-center my-6">
+                <div className="flex items-center my-4 sm:my-6">
                     <div className="flex-grow h-px bg-gray-300"></div>
-                    <span className="px-3 text-gray-500 text-sm">or</span>
+                    <span className="px-3 text-gray-500 text-sm sm:text-base">or</span>
                     <div className="flex-grow h-px bg-gray-300"></div>
                 </div>
-
+                    
                 {/* Social Logins */}
-                <div className="flex justify-center items-center space-x-4">
-                    <button className="flex items-center cursor-pointer justify-center w-65 space-x-2 border border-gray-400 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
+                    <button className="flex items-center justify-center w-full sm:w-65 space-x-2 border border-gray-400 px-3 sm:px-4 py-2 rounded-lg hover:bg-gray-50 transition">
                         <img
                             src="https://www.svgrepo.com/show/355037/google.svg"
                             alt="Google"
-                            className="w-8"
+                            className="w-6 sm:w-8"
                         />
-                        <span className="text-xl font-semibold">{mode === "signup" ? "SignUp" : "Login"} with Google</span>
+                        <span className="text-sm sm:text-lg font-semibold">{mode === "signup" ? "SignUp" : "Login"} with Google</span>
                     </button>
                 </div>
-
+                    
                 {/* Footer */}
-                <p className="text-center select-none mt-6 text-gray-600">
+                <p className="text-center select-none mt-4 sm:mt-6 text-gray-600 text-sm sm:text-base">
                     {mode === "signup" ? (
                         <>
                             Already have an account?{" "}
@@ -284,12 +289,13 @@ const LoginSignupPage = () => {
                     )}
                 </p>
             </div>
-
-            {/* Left Section */}
-            <div>
-                <img className="w-3xs rounded-3xl" src="/DemoLogo.jpeg" alt="" />
+                
+            {/* Left Section - Image */}
+            <div className="hidden md:block flex-shrink-0 ml-10">
+                <img className="w-64 sm:w-72 md:w-80 rounded-3xl object-cover" src="/DemoLogo.jpeg" alt="Demo Logo" />
             </div>
         </div>
+
     );
 };
 

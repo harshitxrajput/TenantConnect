@@ -1,17 +1,9 @@
-import { Search, LogIn, Plus } from "lucide-react";
-import { IoIosChatbubbles } from "react-icons/io";
-import { IoNotifications, IoSearch } from "react-icons/io5";
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
-import { useState } from "react";
-import HomePropertyListing from "../components/HomePropertyListing.jsx";
-import HomeLandlordTenant from '../components/HomeLandlordTenant.jsx';
-import { landlords, tenants } from "../constants/HomePage.js";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import useAuthStore from "../store/useAuthStore.js";
 import Navbar from "../components/Navbar.jsx";
+import HomePropertyListing from "../components/HomePropertyListing.jsx";
+import HomeLandlordTenant from "../components/HomeLandlordTenant.jsx";
+import { landlords, tenants } from "../constants/HomePage.js";
 
 const properties = [
     {
@@ -53,104 +45,115 @@ const Homepage = () => {
         <div className="min-h-screen bg-gray-50 text-gray-800">
             <Navbar />
 
-            {/* Main Section */}
-            <main className="px-8 py-10 pt-5 mt-25">
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-2xl font-semibold">Discover places to rent</h1>
-                    <button className="text-lg bg-green-600 rounded-lg px-2 py-1 text-white font-semibold cursor-pointer">View more</button>
+            <main className="pt-24 px-4 sm:px-8 lg:px-16">
+
+                {/* Discover Section */}
+                <div className="flex items-center justify-between mb-4 mt-3 sm:mb-6">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">Discover Places to Rent</h1>
+                    <button className="bg-green-600 hover:bg-green-700 text-white text-xs sm:text-sm xl:text-xl font-medium px-2 sm:px-3 py-1 rounded-lg transition">
+                        View More
+                    </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="flex gap-4 sm:gap-6 md:gap-8 lg:gap-8 xl:gap-8 lg:h-110 overflow-x-auto scrollbar-hide py-2">
                     {properties.map((property) => (
                         <div
                             key={property.id}
-                            className="rounded-2xl shadow-md hover:shadow-lg transition bg-white overflow-hidden"
+                            className="flex-shrink-0 w-52 sm:w-60 md:w-72 lg:w-80 xl:w-96 h-68 sm:h-80 md:h-88 lg:h-96 xl:h-100 rounded-xl shadow-md hover:shadow-xl transition bg-white relative"
                         >
-                            <HomePropertyListing property={property} />
+                            <HomePropertyListing
+                                property={property}
+                                hideBookButtonOnMobile={true} // prop to hide Book button on small screens
+                            />
                         </div>
                     ))}
                 </div>
 
-                <div className="w-full border-t mt-8 mb-8 border-gray-300"></div>
+                <hr className="border-gray-300 my-8" />
 
                 {/* Landlords Section */}
-                <section className="bg-gray-50">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-semibold">Meet Our Landlords</h2>
-                        <button className="text-lg bg-green-600 rounded-lg px-2 py-1 text-white font-semibold cursor-pointer">View more</button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {landlords.map((landlord) => (
-                            <HomeLandlordTenant key={landlord.id} user={landlord} type="landlord" />
-                        ))}
-                    </div>
-                </section>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Meet Our Landlords</h2>
+                    <button className="bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base xl:text-xl font-medium px-3 py-1 rounded-lg transition">
+                        View More
+                    </button>
+                </div>
+                <div className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide py-2">
+                    {landlords.map((landlord) => (
+                        <div key={landlord.id} className="flex-shrink-0 w-52 sm:w-60 md:w-64 lg:w-md rounded-xl shadow-md hover:shadow-xl transition bg-white">
+                            <HomeLandlordTenant user={landlord} type="landlord" />
+                        </div>
+                    ))}
+                </div>
 
-                <div className="w-full border-t mt-8 mb-8 border-gray-300"></div>
-                
+                <hr className="border-gray-300 my-8" />
+
                 {/* Tenants Section */}
-                <section>
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-2xl font-semibold">Active Tenants</h2>
-                        <button className="text-lg bg-green-600 rounded-lg px-2 py-1 text-white font-semibold cursor-pointer">View more</button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {tenants.map((tenant) => (
-                            <HomeLandlordTenant key={tenant.id} user={tenant} type="tenant"/>
-                        ))}
-                    </div>
-                </section>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Active Tenants</h2>
+                    <button className="bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base xl:text-xl font-medium px-3 py-1 rounded-lg transition">
+                        View More
+                    </button>
+                </div>
+                <div className="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide py-2">
+                    {tenants.map((tenant) => (
+                        <div key={tenant.id} className="flex-shrink-0 w-52 sm:w-60 md:w-64 rounded-xl shadow-md hover:shadow-xl transition bg-white">
+                            <HomeLandlordTenant user={tenant} type="tenant" />
+                        </div>
+                    ))}
+                </div>
 
-                <div className="w-full border-t mt-8 mb-8 border-gray-300"></div>
-                            
-                {/* Section 4 - Testimonials */}
-                <section className="px-8 py-16 bg-white">
-                    <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">What Our Users Say</h2>
-                    <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-                        <div className="bg-gray-50 p-6 rounded-2xl shadow hover:shadow-lg transition">
-                            <p className="text-gray-600 mb-4">
+                <hr className="border-gray-300 my-8" />
+
+                {/* Testimonials */}
+                <section className="py-12 px-2 sm:px-8 bg-white">
+                    <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 sm:mb-12">
+                        What Our Users Say
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
+                        <div className="bg-gray-50 p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                            <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
                                 "This platform made finding a home so easy! I connected with a great landlord within a week."
                             </p>
-                            <h3 className="font-semibold text-gray-800">– Riya Sharma, Tenant</h3>
+                            <h3 className="font-semibold text-gray-800 text-sm sm:text-base">– Riya Sharma, Tenant</h3>
                         </div>
-                        <div className="bg-gray-50 p-6 rounded-2xl shadow hover:shadow-lg transition">
-                            <p className="text-gray-600 mb-4">
+                        <div className="bg-gray-50 p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                            <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
                                 "As a landlord, I was able to list my property and find reliable tenants quickly. Love it!"
                             </p>
-                            <h3 className="font-semibold text-gray-800">– Arjun Mehta, Landlord</h3>
+                            <h3 className="font-semibold text-gray-800 text-sm sm:text-base">– Arjun Mehta, Landlord</h3>
                         </div>
-                        <div className="bg-gray-50 p-6 rounded-2xl shadow hover:shadow-lg transition">
-                            <p className="text-gray-600 mb-4">
+                        <div className="bg-gray-50 p-4 sm:p-6 rounded-xl shadow-md hover:shadow-xl transition">
+                            <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
                                 "The roommate finder helped me find someone super compatible. Highly recommend!"
                             </p>
-                            <h3 className="font-semibold text-gray-800">– Priya Singh, Roommate</h3>
+                            <h3 className="font-semibold text-gray-800 text-sm sm:text-base">– Priya Singh, Roommate</h3>
                         </div>
                     </div>
                 </section>
             </main>
 
-            {/* Section 5 - Social Media / Community */}
-            <footer className="px-8 py-16 bg-gray-900 text-center text-white">
-                <h2 className="text-3xl font-bold mb-6">Join Our Community</h2>
-                <p className="text-lg text-gray-300 mb-10">
-                    Stay updated with the latest rental tips, housing trends, and community news.  
-                    Follow us on social media and become part of our growing family.
+            {/* Footer */}
+            <footer className="px-4 sm:px-8 py-12 bg-gray-900 text-center text-white">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Join Our Community</h2>
+                <p className="text-sm sm:text-base text-gray-300 mb-6 sm:mb-10 max-w-2xl mx-auto">
+                    Stay updated with the latest rental tips, housing trends, and community news. Follow us on social media and become part of our growing family.
                 </p>
-                <div className="flex justify-center gap-6">
-                    <a href="#" className="text-gray-300 hover:text-white transition">
-                        <FaFacebook size={30} />
-                    </a>
-                    <a href="#" className="text-gray-300 hover:text-white transition">
-                        <FaInstagram size={30} />
-                    </a>
-                    <a href="#" className="text-gray-300 hover:text-white transition">
-                        <FaTwitter size={30} />
-                    </a>
-                    <a href="#" className="text-gray-300 hover:text-white transition">
-                        <FaLinkedin size={30} />
-                    </a>
+                <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+                    <a href="#" className="text-gray-300 hover:text-white transition"><FaFacebook size={28} /></a>
+                    <a href="#" className="text-gray-300 hover:text-white transition"><FaInstagram size={28} /></a>
+                    <a href="#" className="text-gray-300 hover:text-white transition"><FaTwitter size={28} /></a>
+                    <a href="#" className="text-gray-300 hover:text-white transition"><FaLinkedin size={28} /></a>
                 </div>
             </footer>
+
+            {/* Tailwind class to hide scrollbar */}
+            <style>
+                {`
+                    .scrollbar-hide::-webkit-scrollbar { display: none; }
+                    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+                `}
+            </style>
         </div>
     );
 };

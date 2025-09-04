@@ -3,7 +3,7 @@ import { MapPin, Home } from "lucide-react";
 
 const HomeLandlordTenant = ({ user, type }) => {
     return (
-        <div className="rounded-2xl cursor-pointer shadow-md hover:shadow-lg transition bg-white overflow-hidden">
+        <div className="rounded-2xl cursor-pointer shadow-md h-full hover:shadow-lg transition bg-white overflow-hidden">
             <img
                 src={user.image}
                 alt={user.name}
